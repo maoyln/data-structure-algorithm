@@ -49,7 +49,7 @@ function maxSubArraySum(arr, left, right) {
 }
 
 // 示例
-const nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
-console.log(maxSubArraySum(nums, 0, nums.length - 1)); // 输出最大子列和，例如上述数组的最大子列和为6
+const list = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+console.log(maxSubArraySum(list, 0, list.length - 1)); // 输出最大子列和，例如上述数组的最大子列和为6
 
 // 这段代码首先定义了maxCrossingSum函数，用于计算跨越中点的最大子列和。然后，maxSubArraySum函数通过递归地将数组分成更小的部分，分别求解左半部分和右半部分的最大子列和，以及跨越中点的最大子列和，最后取这三者中的最大值作为结果。这种分而治之的策略使得问题得以有效解决。
