@@ -87,6 +87,7 @@ console.log(findMaxSubsequence(list));
  * 上述两个结果均有漏洞，补充下面方案
  */
 
+// 判断数据是否为负数和领组成，且必须含有0
 function isAllNonPositiveAndContainsZero(arr) {
   let containsZero = false;
   // 遍历数组中的每个元素
@@ -105,13 +106,13 @@ function isAllNonPositiveAndContainsZero(arr) {
 }
 
 function getMaximum(list) {
-  let maxSum = 0;
-  let tempSum = 0;
-  let start = 0;
-  let tempStart = 0;
-  let end = list.length - 1;
-
+  let maxSum = 0; // 最大子列和
+  let tempSum = 0; // 临时最大子列和
+  let start = 0; // 开始下标
+  let tempStart = 0; // 临时开始下标
+  let end = list.length - 1; // 结束下标 
   let allNegative = true; // 假设所有数字都是负数
+
   if (isAllNonPositiveAndContainsZero(list)) {
     return 0 + ' ' + 0 + ' ' + 0;
   }
@@ -144,3 +145,6 @@ function getMaximum(list) {
 
   return maxSum + ' ' + list[start] + ' ' + list[end];
 }
+
+// let list = [-1,-3,-3,-1,-3,-5]
+console.log(getMaximum(list));
