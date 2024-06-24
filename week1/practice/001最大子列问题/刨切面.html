@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GIS场景效果</title>
+  <style media="screen">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    .model {
+      height: 100%
+    }
+  </style>
+  <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js"></script>
+</head>
+
+<body>
+  <div class='main'>
+    <!-- 定义DOM元素，用于在该DOM元素中显示模型或图纸 -->
+    <button type="button" onclick="getModalLayer()">获取模型layer</button>
+    <button type="button" onclick="showSectionBox()">切割</button>
+    <div class='model' id="domId"></div>
+  </div>
+  <script type="text/javascript">
+    // 声明 viewer 及 app
+    let viewerGIS, app;
+    // 声明 UI管理器、主工具条、自定义工具条、图层管理器
+    let uiMng, mainToolbar, toolbar, layerMng, extLayer;
+    let viewToken = '4dac318a700c452ca7aec4a0787ded15'; // 0624demo sceneId:2928186434164288
+
+    let currentObjectId;
+    let extObjLayer;
+    let extObjMng;
+    // 初始化SDKLoader
+    let BimfaceLoaderConfig = new BimfaceSDKLoaderConfig();
+    BimfaceLoaderConfig.viewToken = viewToken;
+    BimfaceLoaderConfig.version = '3.6.283'; // 控制sdk版本
+    BimfaceSDKLoader.load(BimfaceLoaderConfig, onSDKLoadSucceeded, onSDKLoadFailed);
+
+    // 资源加载成功的回调函数
+    function onSDKLoadSucceeded(viewMetaData) {
+
+      // 构造app
+      let dom4Show = document.getElementById('domId');
+      let webAppConfig = new Glodon.Bimface.Application.WebApplicationGISConfig();
+      webAppConfig.domElement = dom4Show;
+      app = new Glodon.Bimface.Application.WebApplicationGIS(webAppConfig);
+
+      // 获取viewer并加载场景
+      viewer = app.getViewer();
+      viewer.addScene(viewToken);
+      
+      app = new Glodon.Bimface.Application.WebApplicationGIS(webAppConfig);
+
+      // 场景加载的监听事件，场景加载后获取主工具条、管理器等对象
+      viewer.addEventListener(Glodon.Bimface.Viewer.ViewerGISEvent.SceneAdded, function () {
+        // 获取图层管理器
+        layerMng = viewer.getLayerManager();
+        // 获取UI管理器
+        uiMng = app.getUIManager();
+        // createExtObjLayerMng();
+      });
+
+      // 图层加载完毕的监听事件，图层加载后对模型进行着色
+      viewer.addEventListener(Glodon.Bimface.Viewer.ViewerGISEvent.LayerAdded, function (data) {
+        // addDeviceModel();
+        // console.log(data, 'data');
+        // const layer = viewer.getLayerManager().getLayer(data.layerId);
+        //  modelId：10000705573026
+        // if (layer?.typeName === 'TilesetLayer') {
+        //   // 调整图层的geometry error，会影响到该图层的加载时机
+        //   // layer?.setGeometryErrorRatio(0.1);
+
+        //   console.log('设置---');
+        // }
+      });
+    }
+
+    // 资源加载失败的回调函数
+    function onSDKLoadFailed(error) {
+      console.log(error);
+    };
+
+    // 开启刨切盒子
+    function showSectionBox() {
+      const sectionBoxConfig = new Glodon.Bimface.Plugins.Section.SectionBoxConfig();
+      sectionBoxConfig.direction = 'forward'; // 正方向
+      sectionBoxConfig.filter = ['layer_10000865296315']
+      sectionBoxConfig.viewer = viewer
+      sectionBoxConfig.plane = 'x'
+      const sectionBox = new Glodon.Bimface.Plugins.Section.SectionBox(sectionBoxConfig);
+      sectionBox.showBox();
+      // sectionBox.hideBox();
+    }
+
+    function getModalLayer() {
+      // const layer = viewer.getLayerManager().getLayer(`layer_10000865296315`);
+      const currentModel = viewer.getLayerManager().getLayer('layer_10000865296315');
+      // console.log(layer, 'layer--01');
+
+      // let currentModel = viewer.getModel(10000865296315);
+      console.log(currentModel, 'currentModel--01');
+
+      const boundingBox = currentModel.getBoundingBox(10000865296315)
+      if (boundingBox?.max && boundingBox?.min) {
+        const { max, min } = boundingBox;
+        const cutPoint = {
+          x: (min.x + max.x) / 2,
+          y: (min.y + max.y) / 2,
+          z: (min.z + max.z) / 2
+        }
+        const plane = {
+          point: { ...cutPoint },
+          normal: { x: 0, y: 0, z: 1 }
+        };
+        const componentManager = currentModel.getComponentManager();
+        const componentArray = componentManager.splitComponentByPlane(7004256694576150690, plane);
+  
+        console.log(componentArray, 'componentArray---01212');
+        if (componentArray?.[0]) {
+
+          console.log(extObjMng, 'extObjLayer----01');
+          extObjMng.loadObject(
+            {
+              name: '外部构件01',
+              object: componentArray?.[0]
+            },
+            function() {
+              const objectId = extObjMng.getObjectIdByName('外部构件01');
+              console.log(objectId, 'objectId---012');
+
+              viewer.render();
+            }
+          );
+        }
+        componentManager.hide({ ids: [7004256694576150690] }); // 隐藏原构件
+      }
+      
+    }
+
+  </script>
+</body>
+
+</html>
