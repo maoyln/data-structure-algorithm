@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GIS场景效果</title>
+  <style media="screen">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    .model {
+      height: 100%
+    }
+  </style>
+  <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js"></script>
+  <script src="./bimfaceFn.js"></script>
+</head>
+
+<body>
+  <div class='main'>
+    <!-- 定义DOM元素，用于在该DOM元素中显示模型或图纸 -->
+    <button type="button" onclick="getModalLayer()">获取模型layer</button>
+    <button type="button" onclick="showSectionBox()">切割</button>
+    <button type="button" onclick="hideSectionBox()">退出切割</button>
+    <button type="button" onclick="drawPolygon()">绘制多边形</button>
+    <button type="button" onclick="saveKeyFrame()">添加漫游点</button>
+    <button type="button" onclick="play()">关注视角</button>
+    
+    <div class='model' id="domId"></div>
+  </div>
+  <script type="text/javascript">
+   
+  </script>
+</body>
+
+</html>
