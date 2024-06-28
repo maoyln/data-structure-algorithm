@@ -2,7 +2,7 @@
 let viewer, app;
 // 声明 UI管理器、主工具条、自定义工具条、图层管理器
 let uiMng, mainToolbar, toolbar, layerMng, extLayer;
-let viewToken = '56c054f6d76a4dcf9d706cddb51e16e6'; // 0624demo sceneId:2928186434164288
+let viewToken = 'ffb6c216df93499a8f96b65787693c3a'; // 0624demo sceneId:2928186434164288
 
 let currentObjectId;
 let extObjLayer;
@@ -158,6 +158,9 @@ function getWalkthrough() {
     let walkthroughConfig = new Glodon.Bimface.Plugins.Walkthrough.WalkthroughConfig();
     walkthroughConfig.viewer = viewer;
     walkthrough = new Glodon.Bimface.Plugins.Walkthrough.Walkthrough(walkthroughConfig);
+    walkthrough.setWalkthroughTime({
+      totalTime: 0.5
+    })
   }
 }
 
