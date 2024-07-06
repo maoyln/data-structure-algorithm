@@ -1,3 +1,6 @@
+/**
+ * 顺序存储结构
+ */
 // 使用数组表示二叉树
 const tree = ['root', 'left', 'right', 'left.left', 'left.right', 'right.left', 'right.right'];
 

@@ -1,3 +1,6 @@
+/**
+ * 链式存储
+ */
 class TreeNode {
   constructor(value) {
     this.value = value; // 节点数据
