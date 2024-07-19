@@ -31,6 +31,7 @@ const dom = document.getElementById('test');
 // 获取dom元素的padding值
 function getPadding(el) {
     const domCss = window.getComputedStyle(el, null);
+    console.log(domCss);
     const pl = Number.parseInt(domCss.paddingLeft, 10) || 0;
     const pr = Number.parseInt(domCss.paddingRight, 10) || 0;
     console.log('padding-left:', pl, 'padding-right:', pr);
@@ -100,7 +101,7 @@ function setTextContent(text) {
         // 计算左右两边文本要截取的字符索引
         const leftTextIndex = calcTextLength(text, width);
         const rightTextIndex = calcTextLength(reverseStr, width);
-        
+
         // 将右侧字符先截取，后翻转
         reverseStr = reverseStr.substring(0, rightTextIndex);
         reverseStr = reverseStr.split('').reverse().join('');
